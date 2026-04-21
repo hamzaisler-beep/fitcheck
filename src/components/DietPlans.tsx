@@ -1,5 +1,5 @@
 import React from 'react';
-import { Utensils, Coffee, Apple, Moon, Plus, ChevronRight } from 'lucide-react';
+import { Coffee, Apple, Moon, Plus, ChevronRight } from 'lucide-react';
 import { auth } from '../lib/firebase';
 
 interface DietPlansProps {

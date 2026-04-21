@@ -1,4 +1,5 @@
-import { Activity, Flame, Clock, TrendingUp, ChevronRight, Plus } from 'lucide-react';
+import React from 'react';
+import { Activity, Flame, TrendingUp, ChevronRight, Plus } from 'lucide-react';
 import { auth } from '../lib/firebase';
 
 interface DashboardProps {
@@ -41,7 +42,7 @@ const Dashboard: React.FC<DashboardProps> = ({ userData }) => {
         </div>
       </div>
 
-      {/* Daily Progress Rings - Responsive Grid */}
+      {/* Daily Progress Rings */}
       <div className="glass-card" style={{ 
         padding: '24px', 
         display: 'grid', 
@@ -60,7 +61,7 @@ const Dashboard: React.FC<DashboardProps> = ({ userData }) => {
               <Flame size={18} color="var(--accent-primary)" />
             </div>
           </div>
-          <span style={{ fontSize: '11px', fontWeight: 'bold', whiteSpace: 'nowrap' }}>1,240 kcal</span>
+          <span style={{ fontSize: '11px', fontWeight: 'bold' }}>1,240 kcal</span>
         </div>
 
         <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '8px' }}>
@@ -74,13 +75,13 @@ const Dashboard: React.FC<DashboardProps> = ({ userData }) => {
               <Activity size={18} color="var(--accent-secondary)" />
             </div>
           </div>
-          <span style={{ fontSize: '11px', fontWeight: 'bold', whiteSpace: 'nowrap' }}>45 dk Spor</span>
+          <span style={{ fontSize: '11px', fontWeight: 'bold' }}>45 dk Spor</span>
         </div>
 
         <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '8px' }}>
           <button 
             onClick={() => setWater(prev => Math.min(prev + 0.25, targetWater))}
-            style={{ position: 'relative', width: '70px', height: '70px', padding: 0 }}
+            style={{ position: 'relative', width: '70px', height: '70px', padding: 0, background: 'none', border: 'none' }}
           >
             <svg width="70" height="70" viewBox="0 0 80 80">
               <circle cx="40" cy="40" r="34" stroke="rgba(255,255,255,0.05)" strokeWidth="8" fill="none" />
@@ -91,7 +92,7 @@ const Dashboard: React.FC<DashboardProps> = ({ userData }) => {
               <Plus size={20} color="var(--accent-tertiary)" />
             </div>
           </button>
-          <span style={{ fontSize: '11px', fontWeight: 'bold', whiteSpace: 'nowrap' }}>{water.toFixed(1)} / {targetWater}L</span>
+          <span style={{ fontSize: '11px', fontWeight: 'bold' }}>{water.toFixed(1)} / {targetWater}L</span>
         </div>
       </div>
 
@@ -125,7 +126,7 @@ const Dashboard: React.FC<DashboardProps> = ({ userData }) => {
       <section>
         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '16px' }}>
           <h3 style={{ fontSize: '18px' }}>Sıradaki Öğün</h3>
-          <button style={{ color: 'var(--accent-primary)', fontSize: '14px', fontWeight: '600' }}>Tümünü Gör</button>
+          <button style={{ color: 'var(--accent-primary)', fontSize: '14px', fontWeight: '600', background: 'none', border: 'none' }}>Tümünü Gör</button>
         </div>
         <div className="glass-card" style={{ padding: '16px', display: 'flex', gap: '16px', alignItems: 'center' }}>
           <div style={{ width: '60px', height: '60px', borderRadius: '16px', overflow: 'hidden' }}>

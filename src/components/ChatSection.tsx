@@ -1,17 +1,32 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { motion } from 'framer-motion';
 import { Send, Image as ImageIcon } from 'lucide-react';
 
+interface Message {
+  id: number;
+  text: string;
+  sender: 'ai' | 'user';
+  time: string;
+}
+
+interface Mentor {
+  name: string;
+  role: string;
+  avatar: string;
+  color: string;
+}
+
 const ChatSection = () => {
-  const [activeMentor, setActiveMentor] = useState('dietitian');
+  const [activeMentor, setActiveMentor] = useState<'dietitian' | 'pt'>('dietitian');
   const [inputValue, setInputValue] = useState('');
   const [isAnalyzing, setIsAnalyzing] = useState(false);
-  const [messages, setMessages] = useState({
+  
+  const [messages, setMessages] = useState<{ [key: string]: Message[] }>({
     dietitian: [{ id: 1, text: "Merhaba Hamza! Bugün ne yedin? Fotoğrafını çek gönder analiz edelim.", sender: 'ai', time: '09:15' }],
     pt: [{ id: 1, text: "Selam! Bugünkü antrenmana hazır mısın?", sender: 'ai', time: '10:00' }]
   });
 
-  const mentors = {
+  const mentors: { [key: string]: Mentor } = {
     dietitian: { name: "Dyt. Melis", role: "AI Diyetisyen", avatar: "https://api.dicebear.com/7.x/avataaars/svg?seed=Melis", color: "var(--accent-secondary)" },
     pt: { name: "Hoca Murat", role: "AI Antrenör", avatar: "https://api.dicebear.com/7.x/avataaars/svg?seed=Murat", color: "var(--accent-primary)" }
   };
@@ -19,7 +34,7 @@ const ChatSection = () => {
   const handleSend = (textInput = inputValue, holdsImage = false) => {
     if (!textInput.trim() && !holdsImage) return;
 
-    const userMsg = { 
+    const userMsg: Message = { 
       id: Date.now(), 
       text: holdsImage ? "📸 Bir fotoğraf paylaştı" : textInput, 
       sender: 'user', 
@@ -33,7 +48,7 @@ const ChatSection = () => {
       setIsAnalyzing(true);
       setTimeout(() => {
         setIsAnalyzing(false);
-        const aiResponse = {
+        const aiResponse: Message = {
           id: Date.now() + 1,
           text: "Harika bir tabak! 🥗 Analiz ettim:\n\n• Somon (150g): 300 kcal\n• Kinoa (100g): 120 kcal\n• Toplam: 420 kcal\n• Protein: 35g\n\nAkşam için çok dengeli bir seçim, tebrikler!",
           sender: 'ai',
@@ -43,7 +58,7 @@ const ChatSection = () => {
       }, 3000);
     } else {
       setTimeout(() => {
-        const aiResponse = {
+        const aiResponse: Message = {
           id: Date.now() + 1,
           text: activeMentor === 'dietitian' ? "Anladım, bunu not aldım. Su içmeyi unutma!" : "Süper, antrenman sonrası 1 ölçek protein almayı ihmal etme. 🔥",
           sender: 'ai',
@@ -56,7 +71,6 @@ const ChatSection = () => {
 
   return (
     <div style={{ display: 'flex', flexDirection: 'column', height: 'calc(100vh - 180px)', gap: '12px' }}>
-      {/* Mentor Switcher - Pill Style */}
       <div style={{ 
         display: 'flex', 
         background: 'var(--surface-color)', 
@@ -64,7 +78,7 @@ const ChatSection = () => {
         borderRadius: '16px',
         border: '1px solid var(--border-color)'
       }}>
-        {['dietitian', 'pt'].map(m => (
+        {(['dietitian', 'pt'] as const).map(m => (
           <button 
             key={m} 
             onClick={() => setActiveMentor(m)} 
@@ -76,7 +90,8 @@ const ChatSection = () => {
               color: activeMentor === m ? '#000' : 'var(--text-secondary)', 
               fontWeight: '700',
               fontSize: '13px',
-              transition: 'all 0.2s ease'
+              transition: 'all 0.2s ease',
+              border: 'none'
             }}
           >
             {m === 'dietitian' ? 'Diyetisyen' : 'Antrenör'}
@@ -84,7 +99,6 @@ const ChatSection = () => {
         ))}
       </div>
 
-      {/* Chat Area */}
       <div className="glass-card" style={{ 
         flex: 1, 
         display: 'flex', 
@@ -93,7 +107,7 @@ const ChatSection = () => {
         border: '1px solid var(--glass-border)'
       }}>
         <div style={{ padding: '12px 16px', borderBottom: '1px solid var(--border-color)', display: 'flex', alignItems: 'center', gap: '12px', background: 'rgba(255,255,255,0.02)' }}>
-           <img src={mentors[activeMentor].avatar} style={{ width: '36px', height: '36px', borderRadius: '10px', background: 'var(--surface-hover)' }} />
+           <img src={mentors[activeMentor].avatar} style={{ width: '36px', height: '36px', borderRadius: '10px', background: 'var(--surface-hover)' }} alt="Mentor" />
            <div>
              <h4 style={{ fontSize: '14px' }}>{mentors[activeMentor].name}</h4>
              <div style={{ display: 'flex', alignItems: 'center', gap: '4px' }}>
@@ -103,7 +117,6 @@ const ChatSection = () => {
            </div>
         </div>
 
-        {/* Messages */}
         <div style={{ 
           flex: 1, 
           overflowY: 'auto', 
@@ -145,11 +158,10 @@ const ChatSection = () => {
           )}
         </div>
 
-        {/* Input Area */}
         <div style={{ padding: '12px 16px', borderTop: '1px solid var(--border-color)', display: 'flex', gap: '10px', alignItems: 'center' }}>
           <button 
             onClick={() => handleSend('', true)} 
-            style={{ color: 'var(--text-secondary)', padding: '4px' }}
+            style={{ color: 'var(--text-secondary)', padding: '4px', background: 'none', border: 'none' }}
           >
             <ImageIcon size={22} />
           </button>
@@ -162,7 +174,7 @@ const ChatSection = () => {
               onKeyPress={e => e.key === 'Enter' && handleSend()} 
               style={{ flex: 1, background: 'none', border: 'none', color: '#fff', fontSize: '14px', outline: 'none' }} 
             />
-            <button onClick={() => handleSend()} style={{ width: '36px', height: '36px', background: 'var(--accent-primary)', borderRadius: '50%', color: '#000', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+            <button onClick={() => handleSend()} style={{ width: '36px', height: '36px', background: 'var(--accent-primary)', borderRadius: '50%', color: '#000', display: 'flex', alignItems: 'center', justifyContent: 'center', border: 'none' }}>
               <Send size={18} style={{ margin: 'auto' }} />
             </button>
           </div>

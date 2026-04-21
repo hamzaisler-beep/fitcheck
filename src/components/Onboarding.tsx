@@ -198,7 +198,7 @@ const Onboarding: React.FC<OnboardingProps> = ({ onComplete }) => {
   );
 };
 
-const InputGroup = ({ label, value, onChange }: any) => (
+const InputGroup = ({ label, value, onChange }: { label: string, value: string, onChange: (v: string) => void }) => (
   <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
     <label style={{ fontSize: '14px', color: 'var(--text-secondary)', fontWeight: '600' }}>{label}</label>
     <input 

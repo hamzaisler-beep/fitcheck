@@ -1,5 +1,5 @@
 import React from 'react';
-import { User, Settings, FileText, Scale, Ruler, ChevronRight, Upload, TrendingUp, Info, LogOut } from 'lucide-react';
+import { Settings, FileText, Scale, Ruler, ChevronRight, Upload, TrendingUp, LogOut } from 'lucide-react';
 import { 
   AreaChart, 
   Area, 
