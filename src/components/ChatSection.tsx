@@ -22,8 +22,8 @@ const ChatSection = () => {
   const [isAnalyzing, setIsAnalyzing] = useState(false);
   
   const [messages, setMessages] = useState<{ [key: string]: Message[] }>({
-    dietitian: [{ id: 1, text: "Merhaba Hamza! Bugün ne yedin? Fotoğrafını çek gönder analiz edelim.", sender: 'ai', time: '09:15' }],
-    pt: [{ id: 1, text: "Selam! Bugünkü antrenmana hazır mısın?", sender: 'ai', time: '10:00' }]
+    dietitian: [{ id: 1, text: "Merhaba! Ben diyetisyenin Melis. Bugün beslenmeni nasıl planlayalım? Yediklerinin fotoğrafını atarsan hemen analiz edebilirim.", sender: 'ai', time: 'Şimdi' }],
+    pt: [{ id: 1, text: "Selam! Ben antrenörün Murat. Bugünkü egzersiz hedefine hazır mısın? Sana özel antrenman programını beraber uygulayabiliriz.", sender: 'ai', time: 'Şimdi' }]
   });
 
   const mentors: { [key: string]: Mentor } = {
@@ -50,7 +50,7 @@ const ChatSection = () => {
         setIsAnalyzing(false);
         const aiResponse: Message = {
           id: Date.now() + 1,
-          text: "Harika bir tabak! 🥗 Analiz ettim:\n\n• Somon (150g): 300 kcal\n• Kinoa (100g): 120 kcal\n• Toplam: 420 kcal\n• Protein: 35g\n\nAkşam için çok dengeli bir seçim, tebrikler!",
+          text: "Harika! 🥗 Yemeğini analiz ettim ve kalori değerlerini profiline not aldım. Dengeli bir öğün olmuş, devam et!",
           sender: 'ai',
           time: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
         };
@@ -60,7 +60,7 @@ const ChatSection = () => {
       setTimeout(() => {
         const aiResponse: Message = {
           id: Date.now() + 1,
-          text: activeMentor === 'dietitian' ? "Anladım, bunu not aldım. Su içmeyi unutma!" : "Süper, antrenman sonrası 1 ölçek protein almayı ihmal etme. 🔥",
+          text: activeMentor === 'dietitian' ? "Bunu not aldım. Beslenme planına sadık kalman harika! 👍" : "Süper, motivasyonunu yüksek tut! Hedeflerimize adım adım yaklaşıyoruz. 🔥",
           sender: 'ai',
           time: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
         };
@@ -71,6 +71,7 @@ const ChatSection = () => {
 
   return (
     <div style={{ display: 'flex', flexDirection: 'column', height: 'calc(100vh - 180px)', gap: '12px' }}>
+      {/* Mentor Switcher */}
       <div style={{ 
         display: 'flex', 
         background: 'var(--surface-color)', 
@@ -99,13 +100,14 @@ const ChatSection = () => {
         ))}
       </div>
 
+      {/* Chat Area */}
       <div className="glass-card" style={{ 
         flex: 1, 
         display: 'flex', 
         flexDirection: 'column', 
         overflow: 'hidden',
         border: '1px solid var(--glass-border)'
-      }}>
+       }}>
         <div style={{ padding: '12px 16px', borderBottom: '1px solid var(--border-color)', display: 'flex', alignItems: 'center', gap: '12px', background: 'rgba(255,255,255,0.02)' }}>
            <img src={mentors[activeMentor].avatar} style={{ width: '36px', height: '36px', borderRadius: '10px', background: 'var(--surface-hover)' }} alt="Mentor" />
            <div>
@@ -117,6 +119,7 @@ const ChatSection = () => {
            </div>
         </div>
 
+        {/* Messages */}
         <div style={{ 
           flex: 1, 
           overflowY: 'auto', 
@@ -158,6 +161,7 @@ const ChatSection = () => {
           )}
         </div>
 
+        {/* Input Area */}
         <div style={{ padding: '12px 16px', borderTop: '1px solid var(--border-color)', display: 'flex', gap: '10px', alignItems: 'center' }}>
           <button 
             onClick={() => handleSend('', true)} 

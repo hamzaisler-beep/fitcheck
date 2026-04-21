@@ -7,7 +7,7 @@ interface DashboardProps {
 }
 
 const Dashboard: React.FC<DashboardProps> = ({ userData }) => {
-  const [water, setWater] = React.useState(1.5);
+  const [water, setWater] = React.useState(0);
   const targetWater = 3.0;
   const waterPercentage = (water / targetWater) * 213;
 
@@ -17,7 +17,7 @@ const Dashboard: React.FC<DashboardProps> = ({ userData }) => {
     <div style={{ display: 'flex', flexDirection: 'column', gap: '24px' }}>
       <header>
         <p style={{ color: 'var(--text-secondary)', fontSize: '14px', fontWeight: '500' }}>Hoş geldin, {displayName} 👋</p>
-        <h2 style={{ fontSize: '28px', marginTop: '4px' }}>Bugün harika görünüyorsun!</h2>
+        <h2 style={{ fontSize: '28px', marginTop: '4px' }}>Bugün yeni bir başlangıç!</h2>
       </header>
 
       {/* Streak Tracker */}
@@ -28,7 +28,7 @@ const Dashboard: React.FC<DashboardProps> = ({ userData }) => {
           </div>
           <div>
             <p style={{ fontSize: '11px', color: 'var(--text-secondary)' }}>Seri</p>
-            <h4 style={{ fontSize: '16px' }}>12 Gün</h4>
+            <h4 style={{ fontSize: '16px' }}>0 Gün</h4>
           </div>
         </div>
         <div className="glass-card" style={{ flex: 1, padding: '16px', display: 'flex', alignItems: 'center', gap: '12px' }}>
@@ -37,7 +37,7 @@ const Dashboard: React.FC<DashboardProps> = ({ userData }) => {
           </div>
           <div>
             <p style={{ fontSize: '11px', color: 'var(--text-secondary)' }}>Puan</p>
-            <h4 style={{ fontSize: '16px' }}>2,450</h4>
+            <h4 style={{ fontSize: '16px' }}>0</h4>
           </div>
         </div>
       </div>
@@ -55,13 +55,13 @@ const Dashboard: React.FC<DashboardProps> = ({ userData }) => {
             <svg width="70" height="70" viewBox="0 0 80 80">
               <circle cx="40" cy="40" r="34" stroke="rgba(255,255,255,0.05)" strokeWidth="8" fill="none" />
               <circle cx="40" cy="40" r="34" stroke="var(--accent-primary)" strokeWidth="8" fill="none" 
-                      strokeDasharray="213" strokeDashoffset="60" strokeLinecap="round" />
+                      strokeDasharray="213" strokeDashoffset="213" strokeLinecap="round" />
             </svg>
             <div style={{ position: 'absolute', inset: 0, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
               <Flame size={18} color="var(--accent-primary)" />
             </div>
           </div>
-          <span style={{ fontSize: '11px', fontWeight: 'bold' }}>1,240 kcal</span>
+          <span style={{ fontSize: '11px', fontWeight: 'bold' }}>0 kcal</span>
         </div>
 
         <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '8px' }}>
@@ -69,13 +69,13 @@ const Dashboard: React.FC<DashboardProps> = ({ userData }) => {
             <svg width="70" height="70" viewBox="0 0 80 80">
               <circle cx="40" cy="40" r="34" stroke="rgba(255,255,255,0.05)" strokeWidth="8" fill="none" />
               <circle cx="40" cy="40" r="34" stroke="var(--accent-secondary)" strokeWidth="8" fill="none" 
-                      strokeDasharray="213" strokeDashoffset="120" strokeLinecap="round" />
+                      strokeDasharray="213" strokeDashoffset="213" strokeLinecap="round" />
             </svg>
             <div style={{ position: 'absolute', inset: 0, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
               <Activity size={18} color="var(--accent-secondary)" />
             </div>
           </div>
-          <span style={{ fontSize: '11px', fontWeight: 'bold' }}>45 dk Spor</span>
+          <span style={{ fontSize: '11px', fontWeight: 'bold' }}>0 dk Spor</span>
         </div>
 
         <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '8px' }}>
@@ -115,9 +115,9 @@ const Dashboard: React.FC<DashboardProps> = ({ userData }) => {
              <img src="https://api.dicebear.com/7.x/bottts/svg?seed=Coach" alt="Coach" style={{ width: '30px' }} />
           </div>
           <div style={{ flex: 1 }}>
-            <h4 style={{ fontSize: '16px', marginBottom: '4px' }}>PT Murat'ın Mesajı</h4>
+            <h4 style={{ fontSize: '16px', marginBottom: '4px' }}>AI Koç Mesajı</h4>
             <p style={{ color: 'var(--text-secondary)', fontSize: '14px' }}>
-              "Bugün bacak antrenmanını atlamadığını görüyorum, harikasın! Akşam yemeğinde protein miktarını biraz artırabilirsin."
+              "Hoş geldin! Profil bilgilerine göre senin için en uygun antrenman ve beslenme planını hazırladım. Başlamaya hazır mısın?"
             </p>
           </div>
         </div>
@@ -128,18 +128,11 @@ const Dashboard: React.FC<DashboardProps> = ({ userData }) => {
           <h3 style={{ fontSize: '18px' }}>Sıradaki Öğün</h3>
           <button style={{ color: 'var(--accent-primary)', fontSize: '14px', fontWeight: '600', background: 'none', border: 'none' }}>Tümünü Gör</button>
         </div>
-        <div className="glass-card" style={{ padding: '16px', display: 'flex', gap: '16px', alignItems: 'center' }}>
-          <div style={{ width: '60px', height: '60px', borderRadius: '16px', overflow: 'hidden' }}>
-            <img src="https://images.unsplash.com/photo-1546069901-ba9599a7e63c?w=200&h=200&fit=crop" alt="Meal" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+        <div className="glass-card" style={{ padding: '16px', display: 'flex', gap: '16px', alignItems: 'center', justifyContent: 'center', minHeight: '100px' }}>
+          <div style={{ textAlign: 'center' }}>
+            <p style={{ color: 'var(--text-secondary)', fontSize: '14px' }}>Bugün için henüz öğün eklenmedi.</p>
+            <button style={{ color: 'var(--accent-primary)', fontSize: '13px', marginTop: '8px', background: 'none', border: 'none', fontWeight: 'bold' }}>Hemen Ekle +</button>
           </div>
-          <div style={{ flex: 1 }}>
-            <h4 style={{ fontSize: '16px' }}>Izgara Somon ve Kuşkonmaz</h4>
-            <div style={{ display: 'flex', gap: '12px', marginTop: '4px' }}>
-              <span style={{ fontSize: '12px', color: 'var(--text-secondary)' }}>🕒 19:30</span>
-              <span style={{ fontSize: '12px', color: 'var(--accent-primary)' }}>🔥 450 kcal</span>
-            </div>
-          </div>
-          <ChevronRight size={20} color="var(--text-secondary)" />
         </div>
       </section>
     </div>
