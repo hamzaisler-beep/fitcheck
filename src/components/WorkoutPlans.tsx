@@ -10,24 +10,31 @@ const WorkoutPlans: React.FC<WorkoutPlansProps> = ({ userData }) => {
   const [activeSession, setActiveSession] = React.useState<any>(null);
   const displayName = auth.currentUser?.displayName?.split(' ')[0] || userData?.name || 'Kullanıcı';
   
-  const workouts = [
-    { id: 1, title: "Alt Vücut & Core", time: "45 dk", kcal: "350", intensity: "Orta", status: "Yapıldı", color: "#ccff00", exercises: [
-      { name: "Squat", sets: "4", reps: "12" },
-      { name: "Lunges", sets: "3", reps: "15" },
-      { name: "Plank", sets: "3", reps: "60sn" }
-    ]},
-    { id: 2, title: "HIIT - Yağ Yakımı", time: "25 dk", kcal: "420", intensity: "Yüksek", status: "Bugün", color: "#ff3d00", exercises: [
-      { name: "Burpees", sets: "4", reps: "20" },
-      { name: "Mountain Climbers", sets: "4", reps: "30sn" },
-      { name: "Jump Squats", sets: "3", reps: "15" }
-    ]},
-    { id: 3, title: "Üst Vücut Güç", time: "50 dk", kcal: "300", intensity: "Orta", status: "Yarın", color: "#00f2ff", exercises: [
-      { name: "Push Ups", sets: "4", reps: "Max" },
-      { name: "Dumbbell Press", sets: "4", reps: "10" }
-    ]},
-  ];
+  const workouts = userData?.workoutPlan?.workouts || [];
+  
+  if (workouts.length === 0) {
+    return (
+      <div style={{ display: 'flex', flexDirection: 'column', gap: '24px', alignItems: 'center', justifyContent: 'center', minHeight: '60vh', textAlign: 'center' }}>
+        <div style={{ width: '80px', height: '80px', background: 'rgba(255,255,255,0.03)', borderRadius: '24px', display: 'flex', alignItems: 'center', justifyContent: 'center', color: 'var(--accent-primary)', marginBottom: '16px' }}>
+          <Dumbbell size={40} />
+        </div>
+        <h2 style={{ fontSize: '24px' }}>Antrenman Programın Henüz Yok</h2>
+        <p style={{ color: 'var(--text-secondary)', maxWidth: '280px' }}>
+          Sana özel bir antrenman programı hazırlamak için AI asistanımızla konuşabilirsin.
+        </p>
+        <button 
+          className="btn-primary" 
+          style={{ marginTop: '12px' }}
+          onClick={() => window.dispatchEvent(new CustomEvent('switchTab', { detail: 'chat' }))}
+        >
+          AI ile Program Oluştur
+        </button>
+      </div>
+    );
+  }
 
   if (activeSession) {
+    // ... (rest of the active session code)
     return (
       <div style={{ display: 'flex', flexDirection: 'column', gap: '20px' }}>
         <button 
@@ -38,10 +45,10 @@ const WorkoutPlans: React.FC<WorkoutPlansProps> = ({ userData }) => {
         </button>
         
         <div className="glass-card" style={{ padding: '24px', textAlign: 'center', position: 'relative', overflow: 'hidden' }}>
-          <div style={{ position: 'absolute', top: 0, left: 0, right: 0, height: '4px', background: activeSession.color }}></div>
+          <div style={{ position: 'absolute', top: 0, left: 0, right: 0, height: '4px', background: activeSession.color || 'var(--accent-primary)' }}></div>
           <h2 style={{ fontSize: '24px', marginBottom: '8px' }}>{activeSession.title}</h2>
           <div style={{ fontSize: '40px', fontWeight: '800', fontFamily: 'var(--font-heading)', color: 'var(--accent-primary)', margin: '16px 0' }}>
-            14:22
+            00:00
           </div>
           <p style={{ color: 'var(--text-secondary)', fontSize: '13px' }}>Antrenman Süresi</p>
         </div>
@@ -88,35 +95,18 @@ const WorkoutPlans: React.FC<WorkoutPlansProps> = ({ userData }) => {
         <p style={{ color: 'var(--text-secondary)', fontSize: '14px' }}>Antrenör Murat tarafından {displayName} için özel hazırlandı.</p>
       </header>
 
-      <section>
-        <div style={{ display: 'flex', gap: '12px', overflowX: 'auto', paddingBottom: '4px' }}>
-           {['Hepsi', 'Güç', 'HIIT', 'Kardiyo'].map((cat, i) => (
-             <button key={cat} style={{
-               padding: '10px 20px',
-               borderRadius: '12px',
-               background: i === 0 ? 'var(--accent-primary)' : 'var(--surface-color)',
-               color: i === 0 ? '#000' : 'var(--text-secondary)',
-               whiteSpace: 'nowrap',
-               fontWeight: '700',
-               fontSize: '13px',
-               border: 'none'
-             }}>{cat}</button>
-           ))}
-        </div>
-      </section>
-
       <div style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
-        {workouts.map((ws) => (
+        {workouts.map((ws: any) => (
           <div 
             key={ws.id} 
             className="glass-card" 
             onClick={() => setActiveSession(ws)}
             style={{ padding: '20px', position: 'relative', overflow: 'hidden', cursor: 'pointer' }}
           >
-            <div style={{ position: 'absolute', top: 0, left: 0, width: '4px', height: '100%', background: ws.color }}></div>
+            <div style={{ position: 'absolute', top: 0, left: 0, width: '4px', height: '100%', background: ws.color || 'var(--accent-primary)' }}></div>
             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start' }}>
               <div>
-                <span style={{ fontSize: '11px', fontWeight: 'bold', color: ws.color, textTransform: 'uppercase' }}>{ws.status}</span>
+                <span style={{ fontSize: '11px', fontWeight: 'bold', color: ws.color || 'var(--accent-primary)', textTransform: 'uppercase' }}>{ws.status}</span>
                 <h4 style={{ fontSize: '18px', margin: '4px 0' }}>{ws.title}</h4>
                 <div style={{ display: 'flex', gap: '16px', marginTop: '8px' }}>
                   <div style={{ display: 'flex', alignItems: 'center', gap: '6px', color: 'var(--text-secondary)', fontSize: '13px' }}>

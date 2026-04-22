@@ -53,9 +53,17 @@ const App: React.FC = () => {
       setLoading(false);
       clearTimeout(timer);
     });
+
+    const handleSwitchTab = (e: any) => {
+      setActiveTab(e.detail);
+    };
+
+    window.addEventListener('switchTab' as any, handleSwitchTab);
+
     return () => {
       unsubscribe();
       clearTimeout(timer);
+      window.removeEventListener('switchTab' as any, handleSwitchTab);
     };
   }, []);
 

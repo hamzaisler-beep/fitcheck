@@ -11,7 +11,10 @@ const Dashboard: React.FC<DashboardProps> = ({ userData }) => {
   const targetWater = 3.0;
   const waterPercentage = (water / targetWater) * 213;
 
-  const displayName = auth.currentUser?.displayName?.split(' ')[0] || userData?.name || 'Kullanıcı';
+  const hasPlans = (userData?.dietPlan?.meals?.length || 0) > 0 || (userData?.workoutPlan?.workouts?.length || 0) > 0;
+  const coachMessage = hasPlans 
+    ? `"Hoş geldin! Profil bilgilerine göre senin için en uygun antrenman ve beslenme planını hazırladım. Başlamaya hazır mısın?"`
+    : `"Hoş geldin ${displayName}! Henüz bir programın yok gibi görünüyor. AI ile konuşarak sana özel bir beslenme ve antrenman planı oluşturabiliriz!"`;
 
   return (
     <div style={{ display: 'flex', flexDirection: 'column', gap: '24px' }}>
@@ -28,7 +31,7 @@ const Dashboard: React.FC<DashboardProps> = ({ userData }) => {
           </div>
           <div>
             <p style={{ fontSize: '11px', color: 'var(--text-secondary)' }}>Seri</p>
-            <h4 style={{ fontSize: '16px' }}>0 Gün</h4>
+            <h4 style={{ fontSize: '16px' }}>{userData?.streak || 0} Gün</h4>
           </div>
         </div>
         <div className="glass-card" style={{ flex: 1, padding: '16px', display: 'flex', alignItems: 'center', gap: '12px' }}>
@@ -37,7 +40,7 @@ const Dashboard: React.FC<DashboardProps> = ({ userData }) => {
           </div>
           <div>
             <p style={{ fontSize: '11px', color: 'var(--text-secondary)' }}>Puan</p>
-            <h4 style={{ fontSize: '16px' }}>0</h4>
+            <h4 style={{ fontSize: '16px' }}>{userData?.score || 0}</h4>
           </div>
         </div>
       </div>
@@ -100,8 +103,10 @@ const Dashboard: React.FC<DashboardProps> = ({ userData }) => {
         padding: '20px', 
         borderLeft: '4px solid var(--accent-primary)',
         background: 'linear-gradient(90deg, rgba(204, 255, 0, 0.05), transparent)'
-      }}>
-        <div style={{ display: 'flex', gap: '12px', alignItems: 'flex-start' }}>
+      }}
+      onClick={() => !hasPlans && window.dispatchEvent(new CustomEvent('switchTab', { detail: 'chat' }))}
+      >
+        <div style={{ display: 'flex', gap: '12px', alignItems: 'flex-start', cursor: !hasPlans ? 'pointer' : 'default' }}>
           <div style={{ 
             width: '40px', 
             height: '40px', 
@@ -117,7 +122,7 @@ const Dashboard: React.FC<DashboardProps> = ({ userData }) => {
           <div style={{ flex: 1 }}>
             <h4 style={{ fontSize: '16px', marginBottom: '4px' }}>AI Koç Mesajı</h4>
             <p style={{ color: 'var(--text-secondary)', fontSize: '14px' }}>
-              "Hoş geldin! Profil bilgilerine göre senin için en uygun antrenman ve beslenme planını hazırladım. Başlamaya hazır mısın?"
+              {coachMessage}
             </p>
           </div>
         </div>

@@ -9,12 +9,28 @@ interface DietPlansProps {
 const DietPlans: React.FC<DietPlansProps> = ({ userData }) => {
   const displayName = auth.currentUser?.displayName?.split(' ')[0] || userData?.name || 'Kullanıcı';
   
-  const meals = [
-    { id: 1, type: "Kahvaltı", icon: <Coffee />, title: "Yulaflı & Meyveli Kase", kcal: "320", time: "08:30", items: ["40g Yulaf", "1 adet Muz", "10 adet Çiğ Badem"], status: 'completed' },
-    { id: 2, type: "Öğle Yemeği", icon: <Apple />, title: "Izgara Tavuklu Salata", kcal: "450", time: "13:00", items: ["150g Tavuk Göğsü", "Akdeniz Yeşilliği", "1 Dilim Tam Buğday Ekmek"], status: 'current' },
-    { id: 3, type: "Ara Öğün", icon: <Plus />, title: "Protein Bar / Yeşil Çay", kcal: "180", time: "16:30", items: ["Fıstık Ezmeli Bar"], status: 'pending' },
-    { id: 4, type: "Akşam Yemeği", icon: <Moon />, title: "Fırın Levrek & Sebze", kcal: "400", time: "19:30", items: ["1 orta boy Levrek", "Buharda Pişmiş Brokoli"], status: 'pending' },
-  ];
+  const meals = userData?.dietPlan?.meals || [];
+  
+  if (meals.length === 0) {
+    return (
+      <div style={{ display: 'flex', flexDirection: 'column', gap: '24px', alignItems: 'center', justifyContent: 'center', minHeight: '60vh', textAlign: 'center' }}>
+        <div style={{ width: '80px', height: '80px', background: 'rgba(255,255,255,0.03)', borderRadius: '24px', display: 'flex', alignItems: 'center', justifyContent: 'center', color: 'var(--accent-secondary)', marginBottom: '16px' }}>
+          <Apple size={40} />
+        </div>
+        <h2 style={{ fontSize: '24px' }}>Beslenme Programın Henüz Yok</h2>
+        <p style={{ color: 'var(--text-secondary)', maxWidth: '280px' }}>
+          Hedeflerine uygun bir beslenme programı oluşturmak için AI asistanımızla konuşabilirsin.
+        </p>
+        <button 
+          className="btn-primary" 
+          style={{ marginTop: '12px' }}
+          onClick={() => window.dispatchEvent(new CustomEvent('switchTab', { detail: 'chat' }))}
+        >
+          AI ile Program Oluştur
+        </button>
+      </div>
+    );
+  }
 
   return (
     <div style={{ display: 'flex', flexDirection: 'column', gap: '24px' }}>
@@ -26,20 +42,20 @@ const DietPlans: React.FC<DietPlansProps> = ({ userData }) => {
       <section style={{ display: 'flex', gap: '16px' }}>
          <div className="glass-card" style={{ flex: 1, padding: '16px', textAlign: 'center' }}>
             <p style={{ fontSize: '12px', color: 'var(--text-secondary)' }}>Günlük Hedef</p>
-            <h4 style={{ fontSize: '18px' }}>1,850 <span style={{ fontSize: '12px' }}>kcal</span></h4>
+            <h4 style={{ fontSize: '18px' }}>{userData?.dietPlan?.targetKcal || 0} <span style={{ fontSize: '12px' }}>kcal</span></h4>
          </div>
          <div className="glass-card" style={{ flex: 1, padding: '16px', textAlign: 'center' }}>
             <p style={{ fontSize: '12px', color: 'var(--text-secondary)' }}>Alınan</p>
-            <h4 style={{ fontSize: '18px' }}>770 <span style={{ fontSize: '12px' }}>kcal</span></h4>
+            <h4 style={{ fontSize: '18px' }}>0 <span style={{ fontSize: '12px' }}>kcal</span></h4>
          </div>
          <div className="glass-card" style={{ flex: 1, padding: '16px', textAlign: 'center' }}>
             <p style={{ fontSize: '12px', color: 'var(--text-secondary)' }}>Kalan</p>
-            <h4 style={{ fontSize: '18px', color: 'var(--accent-secondary)' }}>1,080 <span style={{ fontSize: '12px' }}>kcal</span></h4>
+            <h4 style={{ fontSize: '18px', color: 'var(--accent-secondary)' }}>{userData?.dietPlan?.targetKcal || 0} <span style={{ fontSize: '12px' }}>kcal</span></h4>
          </div>
       </section>
 
       <div style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
-        {meals.map((meal) => (
+        {meals.map((meal: any) => (
           <div key={meal.id} className="glass-card" style={{ 
             padding: '20px', 
             opacity: meal.status === 'completed' ? 0.7 : 1,
@@ -56,7 +72,7 @@ const DietPlans: React.FC<DietPlansProps> = ({ userData }) => {
                 justifyContent: 'center',
                 color: meal.status === 'current' ? 'var(--accent-secondary)' : 'var(--text-secondary)'
               }}>
-                {meal.icon}
+                {meal.type === 'Kahvaltı' ? <Coffee /> : meal.type === 'Akşam Yemeği' ? <Moon /> : <Apple />}
               </div>
               <div style={{ flex: 1 }}>
                 <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start' }}>
@@ -68,7 +84,7 @@ const DietPlans: React.FC<DietPlansProps> = ({ userData }) => {
                 </div>
                 
                 <div style={{ marginTop: '12px', display: 'flex', flexWrap: 'wrap', gap: '8px' }}>
-                  {meal.items.map(item => (
+                  {meal.items.map((item: string) => (
                     <span key={item} style={{ 
                       fontSize: '11px', 
                       background: 'rgba(255,255,255,0.03)', 
