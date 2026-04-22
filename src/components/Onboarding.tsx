@@ -40,8 +40,7 @@ const Onboarding: React.FC<OnboardingProps> = ({ onComplete }) => {
       onComplete(freshDoc.data() || onboardingData);
     } catch (err: any) {
       console.error("Firestore Error details:", err);
-      // Show the actual technical error to the user for debugging
-      setError(`Hata: ${err.message || 'Bilinmeyen veritabanı hatası'}. Lütfen internetini kontrol et veya Firebase kurallarını incele.`);
+      setError('Veritabanı yetki hatası. Lütfen Firebase üzerinden Firestore kurallarını (Rules) güncelleyin.');
     } finally {
       setIsSaving(false);
     }
