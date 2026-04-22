@@ -1,5 +1,5 @@
 import React from 'react';
-import { Activity, Flame, TrendingUp, ChevronRight, Plus } from 'lucide-react';
+import { Activity, Flame, TrendingUp, Plus } from 'lucide-react';
 import { auth } from '../lib/firebase';
 
 interface DashboardProps {
@@ -11,6 +11,7 @@ const Dashboard: React.FC<DashboardProps> = ({ userData }) => {
   const targetWater = 3.0;
   const waterPercentage = (water / targetWater) * 213;
 
+  const displayName = auth.currentUser?.displayName?.split(' ')[0] || userData?.name || 'Kullanıcı';
   const hasPlans = (userData?.dietPlan?.meals?.length || 0) > 0 || (userData?.workoutPlan?.workouts?.length || 0) > 0;
   const coachMessage = hasPlans 
     ? `"Hoş geldin! Profil bilgilerine göre senin için en uygun antrenman ve beslenme planını hazırladım. Başlamaya hazır mısın?"`

@@ -1,5 +1,5 @@
 import React from 'react';
-import { Play, Clock, Flame, CheckCircle2, ArrowLeft } from 'lucide-react';
+import { Play, Clock, Flame, CheckCircle2, ArrowLeft, Dumbbell } from 'lucide-react';
 import { auth } from '../lib/firebase';
 
 interface WorkoutPlansProps {
