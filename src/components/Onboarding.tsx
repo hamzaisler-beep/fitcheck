@@ -40,8 +40,8 @@ const Onboarding: React.FC<OnboardingProps> = ({ onComplete }) => {
       onComplete(freshDoc.data() || onboardingData);
     } catch (err: any) {
       console.error("Firestore Error details:", err);
-      setError('Veritabanı bağlantı hatası. İnternet bağlantını kontrol et veya tekrar dene.');
-      // Don't call onComplete here to prevent the "always shows" loop
+      // Show the actual technical error to the user for debugging
+      setError(`Hata: ${err.message || 'Bilinmeyen veritabanı hatası'}. Lütfen internetini kontrol et veya Firebase kurallarını incele.`);
     } finally {
       setIsSaving(false);
     }
