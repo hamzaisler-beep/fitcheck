@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { ChevronRight, Target, Zap, Heart, ArrowLeft } from 'lucide-react';
-import { doc, setDoc } from 'firebase/firestore';
+import { doc, setDoc, getDoc } from 'firebase/firestore';
 import { db, auth } from '../lib/firebase';
 
 interface OnboardingProps {
@@ -25,18 +25,23 @@ const Onboarding: React.FC<OnboardingProps> = ({ onComplete }) => {
     setIsSaving(true);
     setError('');
     
+    const onboardingData = {
+      ...formData,
+      isOnboarded: true,
+      updatedAt: Date.now()
+    };
+
     try {
-      await setDoc(doc(db, "users", auth.currentUser.uid), {
-        ...formData,
-        isOnboarded: true,
-        updatedAt: new Date()
-      }, { merge: true });
-      onComplete(formData);
+      const userRef = doc(db, "users", auth.currentUser.uid);
+      await setDoc(userRef, onboardingData, { merge: true });
+      
+      // Fetch latest data to ensure state is consistent
+      const freshDoc = await getDoc(userRef);
+      onComplete(freshDoc.data() || onboardingData);
     } catch (err: any) {
-      console.error("Firestore Error:", err);
-      setError('Veritabanı senkronizasyon hatası, yine de giriş yapılıyor...');
-      // Allow entry even if DB write fails
-      setTimeout(() => onComplete(formData), 1500);
+      console.error("Firestore Error details:", err);
+      setError('Veritabanı bağlantı hatası. İnternet bağlantını kontrol et veya tekrar dene.');
+      // Don't call onComplete here to prevent the "always shows" loop
     } finally {
       setIsSaving(false);
     }

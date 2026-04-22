@@ -67,9 +67,9 @@ const App: React.FC = () => {
     };
   }, []);
 
-  const handleOnboardingComplete = (data: any) => {
-    console.log("Onboarding Complete:", data);
-    setUserData(data);
+  const handleOnboardingComplete = (fullData: any) => {
+    console.log("Onboarding Complete:", fullData);
+    setUserData(fullData);
     setIsOnboarded(true);
   };
 
